@@ -67,52 +67,55 @@ export default function AuthPage() {
             <button onClick={() => setRole("admin")} className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border text-sm font-medium transition-all ${role === "admin" ? "border-gold bg-gold/10 text-gold" : "border-primary-foreground/10 text-primary-foreground/50 hover:border-primary-foreground/20"}`}>
               <Shield className="w-4 h-4" /> Admin
             </button>
-            <button onClick={() => setRole("guest")} className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border text-sm font-medium transition-all ${role === "guest" ? "border-gold bg-gold/10 text-gold" : "border-primary-foreground/10 text-primary-foreground/50 hover:border-primary-foreground/20"}`}>
+            <button onClick={() => { setRole("guest"); }} className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border text-sm font-medium transition-all ${role === "guest" ? "border-gold bg-gold/10 text-gold" : "border-primary-foreground/10 text-primary-foreground/50 hover:border-primary-foreground/20"}`}>
               <User className="w-4 h-4" /> Guest
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <AnimatePresence mode="wait">
-              {mode === "signup" && (
-                <motion.div key="name" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
-                  <label className="text-xs text-primary-foreground/50 mb-1 block">Full Name</label>
-                  <input type="text" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Enter your name" className="w-full px-4 py-3 rounded-lg bg-primary-foreground/5 border border-primary-foreground/10 text-primary-foreground placeholder:text-primary-foreground/30 text-sm focus:outline-none focus:border-gold/50 transition-colors" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <div>
-              <label className="text-xs text-primary-foreground/50 mb-1 block">Email</label>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@example.com" className="w-full px-4 py-3 rounded-lg bg-primary-foreground/5 border border-primary-foreground/10 text-primary-foreground placeholder:text-primary-foreground/30 text-sm focus:outline-none focus:border-gold/50 transition-colors" />
+          {/* Guest mode - instant login */}
+          {role === "guest" ? (
+            <div className="text-center space-y-4">
+              <p className="text-sm text-primary-foreground/60">No login required. Browse cases as a guest.</p>
+              <button onClick={handleGuest} className="w-full py-3 rounded-lg gradient-gold text-accent-foreground font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+                <Sparkles className="w-4 h-4" /> Enter as Guest
+              </button>
             </div>
+          ) : (
+            <>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <AnimatePresence mode="wait">
+                  {mode === "signup" && (
+                    <motion.div key="name" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
+                      <label className="text-xs text-primary-foreground/50 mb-1 block">Full Name</label>
+                      <input type="text" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Enter your name" className="w-full px-4 py-3 rounded-lg bg-primary-foreground/5 border border-primary-foreground/10 text-primary-foreground placeholder:text-primary-foreground/30 text-sm focus:outline-none focus:border-gold/50 transition-colors" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-            <div>
-              <label className="text-xs text-primary-foreground/50 mb-1 block">Password</label>
-              <div className="relative">
-                <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" className="w-full px-4 py-3 rounded-lg bg-primary-foreground/5 border border-primary-foreground/10 text-primary-foreground placeholder:text-primary-foreground/30 text-sm focus:outline-none focus:border-gold/50 transition-colors pr-10" />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-foreground/40">
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                <div>
+                  <label className="text-xs text-primary-foreground/50 mb-1 block">Email</label>
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@example.com" className="w-full px-4 py-3 rounded-lg bg-primary-foreground/5 border border-primary-foreground/10 text-primary-foreground placeholder:text-primary-foreground/30 text-sm focus:outline-none focus:border-gold/50 transition-colors" />
+                </div>
+
+                <div>
+                  <label className="text-xs text-primary-foreground/50 mb-1 block">Password</label>
+                  <div className="relative">
+                    <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" className="w-full px-4 py-3 rounded-lg bg-primary-foreground/5 border border-primary-foreground/10 text-primary-foreground placeholder:text-primary-foreground/30 text-sm focus:outline-none focus:border-gold/50 transition-colors pr-10" />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-foreground/40">
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                <button type="submit" className="w-full py-3 rounded-lg gradient-gold text-accent-foreground font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+                  {mode === "login" ? "Sign In" : "Create Account"} <ArrowRight className="w-4 h-4" />
                 </button>
-              </div>
-            </div>
-
-            <button type="submit" className="w-full py-3 rounded-lg gradient-gold text-accent-foreground font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
-              {mode === "login" ? "Sign In" : "Create Account"} <ArrowRight className="w-4 h-4" />
-            </button>
-          </form>
-
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-primary-foreground/10" /></div>
-            <div className="relative flex justify-center"><span className="px-3 text-xs text-primary-foreground/40 bg-transparent">or</span></div>
-          </div>
-
-          <button onClick={handleGuest} className="w-full py-3 rounded-lg border border-primary-foreground/10 text-primary-foreground/70 text-sm font-medium flex items-center justify-center gap-2 hover:bg-primary-foreground/5 transition-colors">
-            <Sparkles className="w-4 h-4" /> Continue as Guest
-          </button>
+              </form>
+            </>
+          )}
         </div>
 
-        <p className="text-xs text-primary-foreground/30 text-center mt-6">Demo: Use any email & password to sign in</p>
+        <p className="text-xs text-primary-foreground/30 text-center mt-6">Demo: Use any email & password to sign in as Admin</p>
       </motion.div>
     </div>
   );
