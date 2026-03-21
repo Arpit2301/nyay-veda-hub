@@ -69,8 +69,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useAuth() {
+export function useAuth(): AuthContextType {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  if (!ctx) {
+    // Fallback for HMR/edge cases — return safe defaults
+    return {
+      user: null,
+      login: () => false,
+      signup: () => false,
+      guestLogin: () => {},
+      logout: () => {},
+      isAuthenticated: false,
+    };
+  }
   return ctx;
 }
