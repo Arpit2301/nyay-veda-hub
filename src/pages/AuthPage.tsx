@@ -67,12 +67,20 @@ export default function AuthPage() {
             <button onClick={() => setRole("admin")} className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border text-sm font-medium transition-all ${role === "admin" ? "border-gold bg-gold/10 text-gold" : "border-primary-foreground/10 text-primary-foreground/50 hover:border-primary-foreground/20"}`}>
               <Shield className="w-4 h-4" /> Admin
             </button>
-            <button onClick={() => setRole("guest")} className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border text-sm font-medium transition-all ${role === "guest" ? "border-gold bg-gold/10 text-gold" : "border-primary-foreground/10 text-primary-foreground/50 hover:border-primary-foreground/20"}`}>
+            <button onClick={() => { setRole("guest"); }} className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border text-sm font-medium transition-all ${role === "guest" ? "border-gold bg-gold/10 text-gold" : "border-primary-foreground/10 text-primary-foreground/50 hover:border-primary-foreground/20"}`}>
               <User className="w-4 h-4" /> Guest
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Guest mode - instant login */}
+          {role === "guest" ? (
+            <div className="text-center space-y-4">
+              <p className="text-sm text-primary-foreground/60">No login required. Browse cases as a guest.</p>
+              <button onClick={handleGuest} className="w-full py-3 rounded-lg gradient-gold text-accent-foreground font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+                <Sparkles className="w-4 h-4" /> Enter as Guest
+              </button>
+            </div>
+          ) : (
             <AnimatePresence mode="wait">
               {mode === "signup" && (
                 <motion.div key="name" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
